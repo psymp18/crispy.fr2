@@ -25,19 +25,20 @@
         </aside>
 
         <main>
-            <div class="main-content">
-                <br>
-                <label for="rego">Search by license plate number:</label>
-                <input type="text" id="rego" name="license-number" placeholder="Enter license plate number" autocomplete="off">
-                <br><br>
-                <button type="submit">Submit</button>
-                <br><br>
-                <div id="message">This is the result</div>
-                <br>
-            </div>
-            <div id="output">
-                <p>Outputs go here!!!</p>
-            </div>
+            <form id="vehicle-search-form">
+                <div class="main-content">
+                    <br>
+                    <label for="rego">Search by license plate number:</label>
+                    <input type="text" id="rego" name="license-number" placeholder="Enter license plate number" autocomplete="off">
+                    <br><br>
+                    <button type="submit">Submit</button>
+                    <br><br>
+                    <div id="message">This is the result</div>
+                    <br>
+                </div>  
+            </form>
+
+            <div id="output"></div>
         </main>
 
         <footer>
