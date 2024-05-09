@@ -23,16 +23,16 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             message.textContent = 'Search successful';
             const outputList = results.map(person => {
-                return `<div style="border: 1px solid black; padding: 5px; margin-bottom: 5px;">
-                            <p style="margin: 5px 0;"><strong>Person ID:</strong> ${person.PersonID}</p>
-                            <p style="margin: 5px 0;"><strong>Name:</strong> ${person.Name}</p>
-                            <p style="margin: 5px 0;"><strong>Address:</strong> ${person.Address}</p>
-                            <p style="margin: 5px 0;"><strong>DOB:</strong> ${person.DOB}</p>
-                            <p style="margin: 5px 0;"><strong>License Number:</strong> ${person.LicenseNumber}</p>
-                            <p style="margin: 5px 0;"><strong>Expiry Date:</strong> ${person.ExpiryDate}</p>
+                return `<div style="border: 1px solid black; padding: 10px; margin-bottom: 10px;">
+                            <p><strong>Person ID:</strong> ${person.PersonID}</p>
+                            <p><strong>Name:</strong> ${person.Name}</p>
+                            <p<strong>Address:</strong> ${person.Address}</p>
+                            <p><strong>DOB:</strong> ${person.DOB}</p>
+                            <p><strong>License Number:</strong> ${person.LicenseNumber}</p>
+                            <p><strong>Expiry Date:</strong> ${person.ExpiryDate}</p>
                         </div>`;
             }).join('');
-            output.innerHTML = `<div style='display: flex; flex-wrap: wrap; justify-content: space-around;'>${outputList}</div>`;
+            output.innerHTML = `<div style='display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start;'>${outputList}</div>`;
         }
     });
 
