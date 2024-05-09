@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const name = document.getElementById('name').value.trim();
         const license = document.getElementById('license').value.trim();
 
+        const message = document.getElementById('message');
         const results = await searchPeople(name, license, supabase);
 
         const output = document.getElementById('output');
@@ -31,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <p><strong>Expiry Date:</strong> ${person.ExpiryDate}</p>
                         </div>`;
             }).join('');
-            output.innerHTML = `<div>${outputList}</div>`;
+            output.innerHTML = outputList;
         }
     });
 
