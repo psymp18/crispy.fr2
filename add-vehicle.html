@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add a vehicle</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="container"> <!-- Make sure this div wraps all the grid items -->
+        <header>
+            <h1>Add a Vehicle</h1>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="people-search.html">People Search</a></li>
+                    <li><a href="vehicle-search.html">Vehicle Search</a></li>
+                    <li><a href="add-vehicle.html">Add a vehicle</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <aside>
+            <img src="imgs/add-img.png" alt="Sidebar Image">
+        </aside>
+
+        <main>
+            <div class="main-content">
+                <br>
+                <label for="rego">Vehicle registration/Plate number:</label>
+                <input type="text" id="rego" name="reg-num" placeholder="Enter license plate number" autocomplete="off">
+                <br><br>
+                <label for="make">Make of Vehicle:</label>
+                <input type="text" id="make" name="vehicle-make" placeholder="Enter vehicle make" autocomplete="off">
+                <br><br>
+                <label for="model">Model of Vehicle:</label>
+                <input type="text" id="model" name="vehicle-model" placeholder="Enter vehicle model" autocomplete="off">
+                <br><br>
+                <label for="colour">Colour of Vehicle:</label>
+                <input type="text" id="colour" name="vehicle-colour" placeholder="Enter vehicle colour" autocomplete="off">
+                <br><br>
+                <label for="owner">Owner of Vehicle:</label>
+                <input type="text" id="owner" name="vehicle-owner" placeholder="Enter vehicle Owner" autocomplete="name">
+                <br><br>
+                <button type="submit">Submit</button>
+                <br><br>
+                <div id="message">This is the result</div>
+                <br>
+            </div>
+            <div id="output">
+                <p>Outputs go here!!!</p>
+            </div>
+        </main>
+
+        <footer>
+            <p>This is a sample for the COMP1004 coursework.</p>
+        </footer>
+    </div>
+</body>
+</html>

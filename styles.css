@@ -1,0 +1,109 @@
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#container {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    grid-template-columns: 1fr 4fr;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+  }
+
+#output {
+    display: flex;
+    flex: 1;
+    flex-wrap: wrap;
+    border: 2px dashed black;
+    justify-content: flex-start;
+    padding: 10px;
+    margin: 10px;
+}
+
+.nav-links{
+    padding: 10px;
+    text-decoration: underline;
+    margin: 0;
+    display: flex;
+    justify-content: space-around;
+    list-style-type: none;
+}
+
+nav > ul > li {
+    margin: 0 10px;
+}
+
+footer {
+    grid-row: 3;
+}
+
+aside {
+    grid-column: 1; /* Set sidebar to the first column */
+    grid-row: 2;
+}
+
+header, footer {
+    text-align: center;
+    grid-column: 1 / -1;
+}
+
+footer, header, aside, main {
+    border: 1px solid black;
+    padding: 10px;
+    margin: 10px;
+}
+
+aside img{
+    max-width: 50%;
+    max-height: 25%;
+}
+
+main {
+    grid-row: 2;
+    grid-column: 2; /* Place the main content in the second column */
+    display: flex;
+    flex-direction: column;
+}
+
+
+@media (max-width: 500px) {
+
+    #container {
+        grid-template-columns: 1fr 4fr; /* Sidebar to footer ratio */
+        grid-template-areas:
+          "header"
+          "main"
+          "sidebar footer"; /* Sidebar next to footer */
+    }
+
+    nav > ul {
+        flex-direction: column; /* Stack links vertically */
+        text-align: left;
+    }
+
+    main {
+        grid-column: 1 / -1; /* Main content spans full width */
+    }
+
+    aside {
+        grid-area: sidebar; /* Aligns with new grid area */
+        grid-column: 1; /* Ensures sidebar stays on the left */
+    }
+
+    aside img{
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    footer {
+        grid-area: footer; /* Aligns with new grid area */
+        grid-column: 2; /* Ensures footer is on the right */
+    }
+
+
+}
