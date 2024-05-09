@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <p style="margin: 5px 0;"><strong>Expiry Date:</strong> ${person.ExpiryDate}</p>
                         </div>`;
             }).join('');
-            output.innerHTML = outputList;
+            output.innerHTML = `<div style='display: flex; flex-wrap: wrap; justify-content: space-around;'>${outputList}</div>`;
         }
     });
 
