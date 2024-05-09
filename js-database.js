@@ -24,12 +24,12 @@ document.addEventListener('DOMContentLoaded', function() {
             message.textContent = 'Search successful';
             const outputList = results.map(person => {
                 return `<div style="border: 1px solid black; margin-bottom: 5px;">
-                            <p><strong>Person ID:</strong> ${person.PersonID}</p>
-                            <p><strong>Name:</strong> ${person.Name}</p>
-                            <p><strong>Address:</strong> ${person.Address}</p>
-                            <p><strong>DOB:</strong> ${person.DOB}</p>
-                            <p><strong>License Number:</strong> ${person.LicenseNumber}</p>
-                            <p><strong>Expiry Date:</strong> ${person.ExpiryDate}</p>
+                            <p style="margin: 5px 0;"><strong>Person ID:</strong> ${person.PersonID}</p>
+                            <p style="margin: 5px 0;"><strong>Name:</strong> ${person.Name}</p>
+                            <p style="margin: 5px 0;"><strong>Address:</strong> ${person.Address}</p>
+                            <p style="margin: 5px 0;"><strong>DOB:</strong> ${person.DOB}</p>
+                            <p style="margin: 5px 0;"><strong>License Number:</strong> ${person.LicenseNumber}</p>
+                            <p style="margin: 5px 0;"><strong>Expiry Date:</strong> ${person.ExpiryDate}</p>
                         </div>`;
             }).join('');
             output.innerHTML = outputList;
