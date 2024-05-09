@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             message.textContent = 'Search successful';
             const outputList = results.map(person => {
-                return `<div style="border: 1px solid black; margin-bottom: 5px;">
+                return `<div style="border: 1px solid black; padding: 5px; margin-bottom: 5px;">
                             <p style="margin: 5px 0;"><strong>Person ID:</strong> ${person.PersonID}</p>
                             <p style="margin: 5px 0;"><strong>Name:</strong> ${person.Name}</p>
                             <p style="margin: 5px 0;"><strong>Address:</strong> ${person.Address}</p>
