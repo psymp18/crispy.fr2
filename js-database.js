@@ -17,9 +17,20 @@ document.addEventListener('DOMContentLoaded', function() {
         output.innerHTML = '';
 
         if (results.length === 0) {
+            message.textContext = 'No result found';
             output.innerHTML = '<p>No results found.</p>';
         } else {
-            const outputList = results.map(person => `<div>${person.Name} - ${person.LicenseNumber}</div>`).join('');
+            message.textContext = 'Search successful';
+            const outputList = results.map(person => {
+                return `<div class"person-result">
+                        <p><strong>Person ID:</strong> ${person.PersonID}</p>
+                        <p><strong>Name:</strong> ${person.Name}</p>
+                        <p><strong>Address:</strong> ${person.Address}</p>
+                        <p><strong>DOB:</strong> ${person.DOB}</p>
+                        <p><strong>License Number:</strong> ${person.LicenseNumber}</p>
+                        <p><strong>Expiry Date:</strong> ${person.ExpiryDate}</p>
+                        </div>`;
+            }).join('');
             output.innerHTML = `<div>${outputList}</div>`;
         }
     });
