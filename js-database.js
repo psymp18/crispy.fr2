@@ -28,8 +28,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (table === 'Person') {
             if (name) query = query.ilike('Name', `%${name}%`);
             if (licenseNumber) query = query.ilike('LicenseNumber', `%${licenseNumber}%`);
-        } else if (table === 'Vehicle') {
-            query = query.ilike('LicenseNumber', `%${licenseNumber}%`); // Assuming 'LicenseNumber' or adjust to correct field
+        } else if (table === 'Vehicles') {
+            query = query.ilike('LicenseNumber', `%${VehicleID}%`); // Assuming 'LicenseNumber' or adjust to correct field
         }
 
         const { data, error } = await query;
