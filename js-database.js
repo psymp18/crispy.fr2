@@ -95,11 +95,26 @@ document.addEventListener('DOMContentLoaded', function() {
             outputElement.innerHTML = '<p>No results found.</p>';
         } else {
             messageElement.textContent = 'Search successful';
-            const outputList = data.map(item => `<div class="result-box">
-                <p><strong>ID:</strong> ${item.PersonID || item.VehicleID}</p>
-                <p><strong>Name:</strong> ${item.Name || item.Make}</p>
-                <p><strong>Details:</strong> ${item.Address || item.Model}</p>
-            </div>`).join('');
+            const outputList = data.map(item => {
+                if (table === 'Person') {
+                    return `<div class="result-box">
+                                <p><strong>Person ID:</strong> ${item.PersonID}</p>
+                                <p><strong>Name:</strong> ${item.Name}</p>
+                                <p><strong>Address:</strong> ${item.Address}</p>
+                                <p><strong>DOB:</strong> ${item.DOB}</p>
+                                <p><strong>License Number:</strong> ${item.LicenseNumber}</p>
+                                <p><strong>Expiry Date:</strong> ${item.ExpiryDate}</p>
+                            </div>`;
+                } else if(table === 'Vehicles') {
+                    return `<div class="result-box">
+                                <p><strong>Vehicle ID:</strong> ${item.VehicleID}</p>
+                                <p><strong>Make:</strong> ${item.Make}</p>
+                                <p><strong>Model:</strong> ${item.Model}</p>
+                                <p><strong>Colour:</strong> ${item.Colour}</p>
+                                <p><strong>Owner ID:</strong> ${item.OwnerID}</p>
+                            </div>`;
+                }
+            }).join('');
             outputElement.innerHTML = `<div class="output-area">${outputList}</div>`;
         }
     }
