@@ -67,7 +67,12 @@ document.addEventListener('DOMContentLoaded', function() {
             { VehicleID: rego, Make: make, Model: model, Colour: colour, OwnerID: owner }
         ]);
 
-        updateMessage('Vehicles', data, error);
+        if (error) {
+            console.error('Error adding vehicle: ', error);
+            updateMessage('Error', null, { message: 'Error adding vehicle: ' + error.message });
+        } else {
+            updateMessage('Vehicles', data, { message: 'Vehicle added successfully!' });
+        }
     }
 
     async function addOwner() {
@@ -82,12 +87,19 @@ document.addEventListener('DOMContentLoaded', function() {
             { PersonID: personid, Name: name, Address: address, DOB: dob, LicenseNumber: license, ExpiryDate: expire }
         ]);
 
-        if(!error)
+        if(error)
+        {
+             console.error('Error adding owner: ', error);
+            updateMessage('Error', null, {message: 'Error adding owner: ' + error.message});
+        }
+        else
         {
             document.getElementById('add-new-owner-form').style.display = 'none';
+            const messageElement = document.getElementById('message');
+            messageElement.textContext = "Thank you for submitting the owner's details. Please click 'Add' to add your vehicle's details.";
         }
         
-        updateMessage('Person', data, error);
+        /*updateMessage('Person', data, error);*/
     }
 
     function updateMessage(table, data, error) {
