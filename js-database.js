@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if(error)
         {
             console.error('Error adding vehicle: ', error);
-            message.textContext('Error adding vehicle.';
+            message.textContext('Error adding vehicle.');
         }
         else
         {
