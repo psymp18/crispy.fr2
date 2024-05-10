@@ -2,56 +2,37 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 const supabase = createClient('https://webvrhhbluuvbjrdlsup.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndlYnZyaGhibHV1dmJqcmRsc3VwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTUwMTYzOTMsImV4cCI6MjAzMDU5MjM5M30.CzpwBXjbzBzyQPDZdHcPZWog8vih0Rw_AIECiaX7LlE');
 
 document.addEventListener('DOMContentLoaded', function() {
-    const peopleForm = document.getElementById('search-form');
-    const vehicleForm = document.getElementById('vehicle-search-form');
+    const peopleForm = document.getElementById('search-form');  // Assumes this ID for the people search form
+    const vehicleForm = document.getElementById('vehicle-search-form');  // Assumes this ID for the vehicle search form
+    const addVehicleForm = document.getElementById('add-vehicle-form');  // Assumes this ID for the add vehicle form
 
+    // Event listener for people search
     peopleForm?.addEventListener('submit', async function(e) {
         e.preventDefault();
-        const name = document.getElementById('name').value.trim();
-        const license = document.getElementById('license').value.trim();
-        await performPeopleSearch(name, license);
+        performSearch('Person', 'Name', document.getElementById('name').value, 'LicenseNumber', document.getElementById('license').value);
     });
 
+    // Event listener for vehicle search
     vehicleForm?.addEventListener('submit', async function(e) {
         e.preventDefault();
-        const vehicleReg = document.getElementById('rego').value.trim();
-        await performVehicleSearch(vehicleReg);
+        performSearch('Vehicles', 'VehicleID', document.getElementById('rego').value);
     });
 
-    async function performPeopleSearch(name, license) {
+    // Event listener for adding a vehicle
+    addVehicleForm?.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        addVehicle();
+    });
+
+    async function performSearch(table, key1, value1, key2 = '', value2 = '') {
         const message = document.getElementById('message');
         const output = document.getElementById('output');
-        let query = supabase.from('Person').select('*');
-
-        if (name) query = query.ilike('Name', `%${name}%`);
-        if (license) query = query.ilike('LicenseNumber', `%${license}%`);
+        let query = supabase.from(table).select('*');
+        if (value1) query = query.ilike(key1, `%${value1}%`);
+        if (value2) query = query.ilike(key2, `%${value2}%`);
 
         const { data, error } = await query;
 
-        updateOutput(data, error, message, output, 'Person');
-    }
-
-    async function performVehicleSearch(vehicleReg) {
-        const message = document.getElementById('message');
-        const output = document.getElementById('output');
-
-        let query = supabase
-            .from('Vehicles')
-            .select(`
-                VehicleID,
-                Make,
-                Model,
-                Colour,
-                Person (Name, LicenseNumber)
-            `)
-            .ilike('VehicleID', `%${vehicleReg}%`);
-
-        const { data, error } = await query;
-
-        updateOutput(data, error, message, output, 'Vehicle');
-    }
-
-    function updateOutput(data, error, message, output, type) {
         output.innerHTML = '';
         if (error) {
             console.error('Error fetching data: ', error);
@@ -64,30 +45,53 @@ document.addEventListener('DOMContentLoaded', function() {
             output.innerHTML = '<p>No results found.</p>';
         } else {
             message.textContent = 'Search successful';
-            const outputList = data.map(item => formatOutput(item, type)).join('');
+            const outputList = data.map(item => {
+                if (table === 'Person') {
+                    return `<div class="result-box">
+                                <p><strong>Name:</strong> ${item.Name}</p>
+                                <p><strong>License Number:</strong> ${item.LicenseNumber}</p>
+                                <p><strong>Address:</strong> ${item.Address}</p>
+                                <p><strong>DOB:</strong> ${item.DOB}</p>
+                                <p><strong>Expiry Date:</strong> ${item.ExpiryDate}</p>
+                            </div>`;
+                } else {
+                    return `<div class="result-box">
+                                <p><strong>Vehicle ID:</strong> ${item.VehicleID}</p>
+                                <p><strong>Make:</strong> ${item.Make}</p>
+                                <p><strong>Model:</strong> ${item.Model}</p>
+                                <p><strong>Colour:</strong> ${item.Colour}</p>
+                                <p><strong>Owner ID:</strong> ${item.OwnerID}</p>
+                            </div>`;
+                }
+            }).join('');
             output.innerHTML = `<div class="output-area">${outputList}</div>`;
         }
     }
 
-    function formatOutput(item, type) {
-        if (type === 'Person') {
-            return `<div class="result-box">
-                        <p><strong>Person ID:</strong> ${item.PersonID}</p>
-                        <p><strong>Name:</strong> ${item.Name}</p>
-                        <p><strong>Address:</strong> ${item.Address}</p>
-                        <p><strong>DOB:</strong> ${item.DOB}</p>
-                        <p><strong>License Number:</strong> ${item.LicenseNumber}</p>
-                        <p><strong>Expiry Date:</strong> ${item.ExpiryDate}</p>
-                    </div>`;
+    async function addVehicle() {
+        const rego = document.getElementById('rego').value.trim();
+        const make = document.getElementById('make').value.trim();
+        const model = document.getElementById('model').value.trim();
+        const colour = document.getElementById('colour').value.trim();
+        const owner = document.getElementById('owner').value.trim();
+        const message = document.getElementById('message');
+
+        const { data, error } = await supabase.from('Vehicles').insert([
+            {
+                VehicleID: rego,
+                Make: make,
+                Model: model,
+                Colour: colour,
+                OwnerID: owner  // Assumes owner ID directly provided; adjust if needed to handle new owner creation
+            }
+        ]);
+
+        if (error) {
+            console.error('Error adding vehicle: ', error);
+            message.textContent = 'Error adding vehicle.';
         } else {
-            return `<div class="result-box">
-                        <p><strong>Vehicle ID:</strong> ${item.VehicleID}</p>
-                        <p><strong>Make:</strong> ${item.Make}</p>
-                        <p><strong>Model:</strong> ${item.Model}</p>
-                        <p><strong>Colour:</strong> ${item.Colour}</p>
-                        <p><strong>Owner Name:</strong> ${item.Person?.Name || 'Unknown'}</p>
-                        <p><strong>Owner License Number:</strong> ${item.Person?.LicenseNumber || 'Unknown'}</p>
-                    </div>`;
+            message.textContent = 'Vehicle added successfully!';
+            console.log('Added vehicle:', data);
         }
     }
 });
