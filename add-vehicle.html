@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add a vehicle</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="js-database.js" type="module"></script>
 </head>
 <body>
     <div id="container"> <!-- Make sure this div wraps all the grid items -->
@@ -24,28 +25,31 @@
         </aside>
 
         <main>
-            <div class="main-content">
-                <br>
-                <label for="rego">Vehicle registration/Plate number:</label>
-                <input type="text" id="rego" name="reg-num" placeholder="Enter license plate number" autocomplete="off">
-                <br><br>
-                <label for="make">Make of Vehicle:</label>
-                <input type="text" id="make" name="vehicle-make" placeholder="Enter vehicle make" autocomplete="off">
-                <br><br>
-                <label for="model">Model of Vehicle:</label>
-                <input type="text" id="model" name="vehicle-model" placeholder="Enter vehicle model" autocomplete="off">
-                <br><br>
-                <label for="colour">Colour of Vehicle:</label>
-                <input type="text" id="colour" name="vehicle-colour" placeholder="Enter vehicle colour" autocomplete="off">
-                <br><br>
-                <label for="owner">Owner of Vehicle:</label>
-                <input type="text" id="owner" name="vehicle-owner" placeholder="Enter vehicle Owner" autocomplete="name">
-                <br><br>
-                <button type="submit">Submit</button>
-                <br><br>
-                <div id="message">This is the result</div>
-                <br>
-            </div>
+            <form id="add-vehicle-form">
+                <div class="main-content">
+                    <br>
+                    <label for="rego">Vehicle registration/Plate number:</label>
+                    <input type="text" id="rego" name="reg-num" placeholder="Enter license plate number" autocomplete="off">
+                    <br><br>
+                    <label for="make">Make of Vehicle:</label>
+                    <input type="text" id="make" name="vehicle-make" placeholder="Enter vehicle make" autocomplete="off">
+                    <br><br>
+                    <label for="model">Model of Vehicle:</label>
+                    <input type="text" id="model" name="vehicle-model" placeholder="Enter vehicle model" autocomplete="off">
+                    <br><br>
+                    <label for="colour">Colour of Vehicle:</label>
+                    <input type="text" id="colour" name="vehicle-colour" placeholder="Enter vehicle colour" autocomplete="off">
+                    <br><br>
+                    <label for="owner">Owner of Vehicle:</label>
+                    <input type="text" id="owner" name="vehicle-owner" placeholder="Enter vehicle Owner" autocomplete="name">
+                    <br><br>
+                    <button type="submit">Submit</button>
+                    <br><br>
+                    <div id="message">This is the result</div>
+                    <br>
+                </div>
+            </form>
+
             <div id="output">
                 <p>Outputs go here!!!</p>
             </div>
