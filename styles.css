@@ -22,11 +22,6 @@ body {
     margin: 10px;
 }
 
-.result-item
-{
-    margin: 2px 0;
-}
-
 .output-area
 {
     display: flex; 
