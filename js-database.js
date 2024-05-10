@@ -5,93 +5,87 @@ document.addEventListener('DOMContentLoaded', function() {
     const peopleForm = document.getElementById('search-form');  // Assumes this ID for the people search form
     const vehicleForm = document.getElementById('vehicle-search-form');  // Assumes this ID for the vehicle search form
     const addVehicleForm = document.getElementById('add-vehicle-form');  // Assumes this ID for the add vehicle form
+    const addOwnerForm = document.getElementByID('add-new-owner-form');
 
-    // Event listener for people search
-    peopleForm?.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        performSearch('Person', 'Name', document.getElementById('name').value, 'LicenseNumber', document.getElementById('license').value);
-    });
+    peopleForm?.addEventListener('submit', handlePeopleSearch);
+    vehicleForm?.addEventListener('submit', handleVehicleSearch);
+    addVehicleForm?.addEventListener('submit', handleAddVehicle);
+    addOwnerForm?.addEventListener('submit', handleAddOwner);
 
-    // Event listener for vehicle search
-    vehicleForm?.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        performSearch('Vehicles', 'VehicleID', document.getElementById('rego').value);
-    });
-
-    // Event listener for adding a vehicle
-    addVehicleForm?.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        addVehicle();
-    });
-
-    async function performSearch(table, key1, value1, key2 = '', value2 = '') {
-        const message = document.getElementById('message');
-        const output = document.getElementById('output');
-        let query = supabase.from(table).select('*');
-        if (value1) query = query.ilike(key1, `%${value1}%`);
-        if (value2) query = query.ilike(key2, `%${value2}%`);
-
-        const { data, error } = await query;
-
-        output.innerHTML = '';
-        if (error) {
-            console.error('Error fetching data: ', error);
-            message.textContent = 'Error';
-            return;
-        }
-
-        if (data.length === 0) {
-            message.textContent = 'No result found';
-            output.innerHTML = '<p>No results found.</p>';
-        } else {
-            message.textContent = 'Search successful';
-            const outputList = data.map(item => {
-                if (table === 'Person') {
-                    return `<div class="result-box">
-                                <p><strong>Name:</strong> ${item.Name}</p>
-                                <p><strong>License Number:</strong> ${item.LicenseNumber}</p>
-                                <p><strong>Address:</strong> ${item.Address}</p>
-                                <p><strong>DOB:</strong> ${item.DOB}</p>
-                                <p><strong>Expiry Date:</strong> ${item.ExpiryDate}</p>
-                            </div>`;
-                } else {
-                    return `<div class="result-box">
-                                <p><strong>Vehicle ID:</strong> ${item.VehicleID}</p>
-                                <p><strong>Make:</strong> ${item.Make}</p>
-                                <p><strong>Model:</strong> ${item.Model}</p>
-                                <p><strong>Colour:</strong> ${item.Colour}</p>
-                                <p><strong>Owner ID:</strong> ${item.OwnerID}</p>
-                            </div>`;
-                }
-            }).join('');
-            output.innerHTML = `<div class="output-area">${outputList}</div>`;
-        }
+    async function handlePeopleSearch(event) {
+        event.preventDefault();
+        const name = document.getElementById('name').value.trim();
+        const license = document.getElementById('license').value.trim();
+        await performSearch('Person', { Name: name, LicenseNumber: license });
     }
 
-    async function addVehicle() {
+    async function handleVehicleSearch(event) {
+        event.preventDefault();
+        const rego = document.getElementById('rego').value.trim();
+        await performSearch('Vehicles', { VehicleID: rego });
+    }
+
+    async function handleAddVehicle(event) {
+        event.preventDefault();
         const rego = document.getElementById('rego').value.trim();
         const make = document.getElementById('make').value.trim();
         const model = document.getElementById('model').value.trim();
         const colour = document.getElementById('colour').value.trim();
         const owner = document.getElementById('owner').value.trim();
-        const message = document.getElementById('message');
 
+        // Add vehicle logic
         const { data, error } = await supabase.from('Vehicles').insert([
-            {
-                VehicleID: rego,
-                Make: make,
-                Model: model,
-                Colour: colour,
-                OwnerID: owner  // Assumes owner ID directly provided; adjust if needed to handle new owner creation
-            }
+            { VehicleID: rego, Make: make, Model: model, Colour: colour, OwnerID: owner }
         ]);
 
+        updateMessage(data, error);
+    }
+
+    async function handleAddOwner(event) {
+        event.preventDefault();
+        const personid = document.getElementById('personid').value.trim();
+        const name = document.getElementById('name').value.trim();
+        const address = document.getElementById('address').value.trim();
+        const dob = document.getElementById('dob').value.trim();
+        const license = document.getElementById('license').value.trim();
+        const expire = document.getElementById('expire').value.trim();
+
+        // Add owner logic
+        const { data, error } = await supabase.from('Person').insert([
+            { PersonID: personid, Name: name, Address: address, DOB: dob, LicenseNumber: license, ExpiryDate: expire }
+        ]);
+
+        updateMessage(data, error);
+    }
+
+    async function performSearch(table, criteria) {
+        let query = supabase.from(table).select('*');
+        Object.keys(criteria).forEach(key => {
+            if (criteria[key]) query = query.ilike(key, `%${criteria[key]}%`);
+        });
+
+        const { data, error } = await query;
+        updateMessage(data, error);
+    }
+
+    function updateMessage(data, error) {
+        const messageElement = document.getElementById('message');
+        const outputElement = document.getElementById('output');
         if (error) {
-            console.error('Error adding vehicle: ', error);
-            message.textContent = 'Error adding vehicle.';
+            console.error('Error: ', error);
+            messageElement.textContent = 'Error';
+            outputElement.innerHTML = '<p>No results found.</p>';
+        } else if (data.length === 0) {
+            messageElement.textContent = 'No result found';
+            outputElement.innerHTML = '<p>No results found.</p>';
         } else {
-            message.textContent = 'Vehicle added successfully!';
-            console.log('Added vehicle:', data);
+            messageElement.textContent = 'Search successful';
+            const outputList = data.map(item => `<div class="result-box">
+                <p><strong>ID:</strong> ${item.PersonID || item.VehicleID}</p>
+                <p><strong>Name:</strong> ${item.Name || item.Make}</p>
+                <p><strong>Details:</strong> ${item.Address || item.Model}</p>
+            </div>`).join('');
+            outputElement.innerHTML = `<div class="output-area">${outputList}</div>`;
         }
     }
 });
