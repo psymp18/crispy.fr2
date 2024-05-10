@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const peopleForm = document.getElementById('search-form');  // Assumes this ID for the people search form
     const vehicleForm = document.getElementById('vehicle-search-form');  // Assumes this ID for the vehicle search form
     const addVehicleForm = document.getElementById('add-vehicle-form');  // Assumes this ID for the add vehicle form
-    const addOwnerForm = document.getElementByID('add-new-owner-form');
+    const addOwnerForm = document.getElementById('add-new-owner-form');
 
     peopleForm?.addEventListener('submit', handlePeopleSearch);
     vehicleForm?.addEventListener('submit', handleVehicleSearch);
