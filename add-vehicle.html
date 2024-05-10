@@ -13,7 +13,7 @@
             <h1>Add a Vehicle</h1>
             <nav>
                 <ul class="nav-links">
-                    <li><a href="people-search.html">People Search</a></li>
+                    <li><a href="index.html">People Search</a></li>
                     <li><a href="vehicle-search.html">Vehicle Search</a></li>
                     <li><a href="add-vehicle.html">Add a vehicle</a></li>
                 </ul>
@@ -43,13 +43,29 @@
                     <label for="owner">Owner of Vehicle:</label>
                     <input type="text" id="owner" name="vehicle-owner" placeholder="Enter vehicle Owner" autocomplete="name">
                     <br><br>
-                    <button type="submit">Submit</button>
+                    <button type="submit">Add</button>
                     <br><br>
                     <div id="message">This is the result</div>
                     <br>
                 </div>
             </form>
 
+            <form id="add-new-owner-form" style="display:none;">
+                <label for="personid">Person ID:</label>
+                <input type="text" id="personid" name="personid" autocomplete="off">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" autocomplete="off">
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address" autocomplete="off">
+                <label for="dob">DOB:</label>
+                <input type="text" id="dob" name="dob" autocomplete="off">
+                <label for="license">License Number:</label>
+                <input type="text" id="license" name="license" autocomplete="off">
+                <label for="expire">License Expiry Date:</label>
+                <input type="text" id="expire" name="expire" autocomplete="off">
+                <button type="submit">Add Owner</button>
+            </form>
+ 
             <div id="output">
                 <p>Outputs go here!!!</p>
             </div>
