@@ -2,76 +2,35 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 const supabase = createClient('https://webvrhhbluuvbjrdlsup.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndlYnZyaGhibHV1dmJqcmRsc3VwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTUwMTYzOTMsImV4cCI6MjAzMDU5MjM5M30.CzpwBXjbzBzyQPDZdHcPZWog8vih0Rw_AIECiaX7LlE');
 
 document.addEventListener('DOMContentLoaded', function() {
-    const peopleForm = document.getElementById('search-form');  // Assumes this ID for the people search form
-    const vehicleForm = document.getElementById('vehicle-search-form');  // Assumes this ID for the vehicle search form
-    const addVehicleForm = document.getElementById('add-vehicle-form');  // Assumes this ID for the add vehicle form
+    const peopleForm = document.getElementById('search-form');
+    const vehicleForm = document.getElementById('vehicle-search-form');
+    const addVehicleForm = document.getElementById('add-vehicle-form');
     const addOwnerForm = document.getElementById('add-new-owner-form');
 
-    peopleForm?.addEventListener('submit', handlePeopleSearch);
-    vehicleForm?.addEventListener('submit', handleVehicleSearch);
-    addVehicleForm?.addEventListener('submit', handleAddVehicle);
-    addOwnerForm?.addEventListener('submit', handleAddOwner);
-
-    async function handlePeopleSearch(event) {
+    peopleForm?.addEventListener('submit', async (event) => {
         event.preventDefault();
-        const name = document.getElementById('name').value.trim();
-        const license = document.getElementById('license').value.trim();
-        await performSearch('Person', { Name: name, LicenseNumber: license });
-    }
+        performSearch('Person', {
+            Name: document.getElementById('name').value.trim(),
+            LicenseNumber: document.getElementById('license').value.trim()
+        });
+    });
 
-    async function handleVehicleSearch(event) {
+    vehicleForm?.addEventListener('submit', async (event) => {
         event.preventDefault();
-        const rego = document.getElementById('rego').value.trim();
-        await performSearch('Vehicles', { VehicleID: rego });
-    }
+        performSearch('Vehicles', {
+            VehicleID: document.getElementById('rego').value.trim()
+        });
+    });
 
-    async function handleAddVehicle(event) {
+    addVehicleForm?.addEventListener('submit', async (event) => {
         event.preventDefault();
-        const rego = document.getElementById('rego').value.trim();
-        const make = document.getElementById('make').value.trim();
-        const model = document.getElementById('model').value.trim();
-        const colour = document.getElementById('colour').value.trim();
-        const owner = document.getElementById('owner').value.trim();
+        addVehicle();
+    });
 
-        const ownerExists = await supabase.from('Person').select('PersonID').eq('PersonID', owner);
-        if(ownerExists.error || ownerExists.data.length === 0)
-        {
-            message.textContext = 'Owner does not exist. Please add the owner first.';
-            document.getElementById('add-new-owner-form').style.display = 'block';
-            return;
-        }
-        // Add vehicle logic
-        const { data, error } = await supabase.from('Vehicles').insert([
-            { VehicleID: rego, Make: make, Model: model, Colour: colour, OwnerID: owner }
-        ]);
-        
-        if(error)
-        {
-            console.error('Error adding vehicle: ', error);
-            message.textContext('Error adding vehicle.');
-        }
-        else
-        {
-            message.textContext = 'Vehicle added successfully!';
-        }
-    }
-
-    async function handleAddOwner(event) {
+    addOwnerForm?.addEventListener('submit', async (event) => {
         event.preventDefault();
-        const personid = document.getElementById('personid').value.trim();
-        const name = document.getElementById('name').value.trim();
-        const address = document.getElementById('address').value.trim();
-        const dob = document.getElementById('dob').value.trim();
-        const license = document.getElementById('license').value.trim();
-        const expire = document.getElementById('expire').value.trim();
-
-        // Add owner logic
-        const { data, error } = await supabase.from('Person').insert([
-            { PersonID: personid, Name: name, Address: address, DOB: dob, LicenseNumber: license, ExpiryDate: expire }
-        ]);
-
-        updateMessage(data, error);
-    }
+        addOwner();
+    });
 
     async function performSearch(table, criteria) {
         let query = supabase.from(table).select('*');
@@ -80,39 +39,71 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         const { data, error } = await query;
-        updateMessage(data, error);
+        updateMessage(table, data, error);
     }
 
-    function updateMessage(data, error) {
+    async function addVehicle() {
+        const rego = document.getElementById('rego').value.trim();
+        const make = document.getElementById('make').value.trim();
+        const model = document.getElementById('model').value.trim();
+        const colour = document.getElementById('colour').value.trim();
+        const owner = document.getElementById('owner').value.trim();
+
+        const { data, error } = await supabase.from('Vehicles').insert([
+            { VehicleID: rego, Make: make, Model: model, Colour: colour, OwnerID: owner }
+        ]);
+
+        updateMessage('Vehicles', data, error);
+    }
+
+    async function addOwner() {
+        const personid = document.getElementById('personid').value.trim();
+        const name = document.getElementById('name').value.trim();
+        const address = document.getElementById('address').value.trim();
+        const dob = document.getElementById('dob').value.trim();
+        const license = document.getElementById('license').value.trim();
+        const expire = document.getElementById('expire').value.trim();
+
+        const { data, error } = await supabase.from('Person').insert([
+            { PersonID: personid, Name: name, Address: address, DOB: dob, LicenseNumber: license, ExpiryDate: expire }
+        ]);
+
+        updateMessage('Person', data, error);
+    }
+
+    function updateMessage(table, data, error) {
         const messageElement = document.getElementById('message');
         const outputElement = document.getElementById('output');
+        messageElement.textContent = '';
+        outputElement.innerHTML = '';
+
         if (error) {
             console.error('Error: ', error);
             messageElement.textContent = 'Error';
-            outputElement.innerHTML = '<p>No results found.</p>';
+            outputElement.innerHTML = `<p>Error occurred: ${error.message}</p>`;
         } else if (data.length === 0) {
             messageElement.textContent = 'No result found';
             outputElement.innerHTML = '<p>No results found.</p>';
         } else {
             messageElement.textContent = 'Search successful';
-            const outputList = data.map(item => {
+            let outputList = data.map(item => {
                 if (table === 'Person') {
                     return `<div class="result-box">
-                                <p><strong>Person ID:</strong> ${item.PersonID}</p>
-                                <p><strong>Name:</strong> ${item.Name}</p>
-                                <p><strong>Address:</strong> ${item.Address}</p>
-                                <p><strong>DOB:</strong> ${item.DOB}</p>
-                                <p><strong>License Number:</strong> ${item.LicenseNumber}</p>
-                                <p><strong>Expiry Date:</strong> ${item.ExpiryDate}</p>
-                            </div>`;
-                } else if(table === 'Vehicles') {
+                        <p><strong>ID:</strong> ${item.PersonID}</p>
+                        <p><strong>Name:</strong> ${item.Name}</p>
+                        <p><strong>Address:</strong> ${item.Address}</p>
+                        <p><strong>DOB:</strong> ${item.DOB}</p>
+                        <p><strong>License Number:</strong> ${item.LicenseNumber}</p>
+                        <p><strong>Expiry Date:</strong> ${item.ExpiryDate}</p>
+                    </div>`;
+                } else {
                     return `<div class="result-box">
-                                <p><strong>Vehicle ID:</strong> ${item.VehicleID}</p>
-                                <p><strong>Make:</strong> ${item.Make}</p>
-                                <p><strong>Model:</strong> ${item.Model}</p>
-                                <p><strong>Colour:</strong> ${item.Colour}</p>
-                                <p><strong>Owner ID:</strong> ${item.OwnerID}</p>
-                            </div>`;
+                        <p><strong>Vehicle ID:</strong> ${item.VehicleID}</p>
+                        <p><strong>Make:</strong> ${item.Make}</p>
+                        <p><strong>Model:</strong> ${item.Model}</p>
+                        <p><strong>Colour:</strong> ${item.Colour}</p>
+                        <p><strong>Owner ID:</strong> ${item.OwnerID}</p>
+                    </div>`;
                 }
             }).join('');
             outputElement.innerHTML = `<div class="output-area">${outputList}</div>`;
