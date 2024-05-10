@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     addVehicleForm?.addEventListener('submit', async (event) => {
         event.preventDefault();
-        addVehicle();
+        checkOwner();
     });
 
     addOwnerForm?.addEventListener('submit', async (event) => {
@@ -41,6 +41,20 @@ document.addEventListener('DOMContentLoaded', function() {
         const { data, error } = await query;
         updateMessage(table, data, error);
     }
+
+    async function checkOwner()
+        {
+            const owner = document.getElementById('owner').value.trim();
+            const { data: ownerData, error: ownerError } = await supabase.from('Person').select('PersonID').eq('PersonID', owner);
+
+            if (ownerError || ownerData.length === 0) {
+                document.getElementById('add-new-owner-form').style.display = 'block';
+                updateMessage('Error', null, { message: 'Owner does not exist. Please add the owner first.' });
+                return;
+        }
+
+        addVehicle();
+        }
 
     async function addVehicle() {
         const rego = document.getElementById('rego').value.trim();
@@ -68,6 +82,11 @@ document.addEventListener('DOMContentLoaded', function() {
             { PersonID: personid, Name: name, Address: address, DOB: dob, LicenseNumber: license, ExpiryDate: expire }
         ]);
 
+        if(!error)
+        {
+            document.getElementById('add-new-owner-form').style.display = 'none';
+        }
+        
         updateMessage('Person', data, error);
     }
 
