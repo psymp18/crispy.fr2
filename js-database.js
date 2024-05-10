@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
     async function checkOwner()
         {
             const owner = document.getElementById('owner').value.trim();
-            const { data: ownerData, error: ownerError } = await supabase.from('Person').select('PersonID').eq('PersonID', owner);
+            const { data, error } = await supabase.from('Person').select('PersonID').eq('PersonID', owner);
 
             if (error || data.length === 0) {
                 document.getElementById('add-new-owner-form').style.display = 'block';
