@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
             message.textContent = 'Search successful';
             const outputList = data.map(item => {
                 if (table === 'Person') {
-                    return `<div style="border: 1px solid black; padding: 5px; margin: 10px;">
+                    return `<div class="result-box">
                                 <p><strong>Person ID:</strong> ${item.PersonID}</p>
                                 <p><strong>Name:</strong> ${item.Name}</p>
                                 <p><strong>Address:</strong> ${item.Address}</p>
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <p><strong>Expiry Date:</strong> ${item.ExpiryDate}</p>
                             </div>`;
                 } else {
-                    return `<div style="border: 1px solid black; padding: 5px; margin: 10px;">
+                    return `<div class="result-box">
                                 <p><strong>Vehicle ID:</strong> ${item.VehicleID}</p>
                                 <p><strong>Make:</strong> ${item.Make}</p>
                                 <p><strong>Model:</strong> ${item.Model}</p>
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             </div>`;
                 }
             }).join('');
-            output.innerHTML = `<div style='display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start;'>${outputList}</div>`;
+            output.innerHTML = `<div class="output-area">${outputList}</div>`;
         }
     }
 });
