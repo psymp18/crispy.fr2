@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateMessage(message, isSearch = false, table = '', data = []) {
         const messageElement = document.getElementById('message');
-        const outputElement = document.getElementById('output');
+        const resultsElement = document.getElementById('results');
         messageElement.textContent = message;
 
         if (isSearch) {
@@ -131,9 +131,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>`;
                 }
             }).join('');
-            outputElement.innerHTML = `<div class="output-area">${outputList}</div>`;
+            resultsElement.innerHTML = `<div class="output-area">${outputList}</div>`;
         } else {
-            outputElement.innerHTML = '';
+            resultsElement.innerHTML = '';
         }
     }
 
