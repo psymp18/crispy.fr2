@@ -33,12 +33,27 @@ document.addEventListener('DOMContentLoaded', function() {
         const colour = document.getElementById('colour').value.trim();
         const owner = document.getElementById('owner').value.trim();
 
+        const ownerExists = await supabase.from('Person').select('PersonID').eq('PersonID', owner);
+        if(ownerExists.error || ownerExists.data.length === 0)
+        {
+            message.textContext = 'Owner does not exist. Please add the owner first.';
+            document.getElementById('add-new-owner-form').style.display = 'block';
+            return;
+        }
         // Add vehicle logic
         const { data, error } = await supabase.from('Vehicles').insert([
             { VehicleID: rego, Make: make, Model: model, Colour: colour, OwnerID: owner }
         ]);
-
-        updateMessage(data, error);
+        
+        if(error)
+        {
+            console.error('Error adding vehicle: ', error);
+            message.textContext('Error adding vehicle.';
+        }
+        else
+        {
+            message.textContext = 'Vehicle added successfully!';
+        }
     }
 
     async function handleAddOwner(event) {
