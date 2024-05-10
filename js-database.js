@@ -39,7 +39,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         const { data, error } = await query;
-        updateMessage(table, data, error);
+        if (error) {
+            updateMessage(`Error: ${error.message}`);
+        } else if (data.length === 0) {
+            updateMessage('No result found');
+        } else {
+            updateMessage('Search successful', true, table, data);
+        }
     }
 
     async function checkOwner()
@@ -47,13 +53,13 @@ document.addEventListener('DOMContentLoaded', function() {
             const owner = document.getElementById('owner').value.trim();
             const { data: ownerData, error: ownerError } = await supabase.from('Person').select('PersonID').eq('PersonID', owner);
 
-            if (ownerError || ownerData.length === 0) {
+            if (error || data.length === 0) {
                 document.getElementById('add-new-owner-form').style.display = 'block';
-                updateMessage('Error', null, { message: 'Owner does not exist. Please add the owner first.' });
-                return;
-        }
-
-        addVehicle();
+                updateMessage('Owner does not exist. Please add the owner first.');
+            } else {
+                addVehicle();
+            }
+        
         }
 
     async function addVehicle() {
@@ -68,10 +74,9 @@ document.addEventListener('DOMContentLoaded', function() {
         ]);
 
         if (error) {
-            console.error('Error adding vehicle: ', error);
-            updateMessage('Error', null, { message: 'Error adding vehicle: ' + error.message });
+            updateMessage(`Error adding vehicle: ${error.message}`);
         } else {
-            updateMessage('Vehicles', data, { message: 'Vehicle added successfully!' });
+            updateMessage('Vehicle added successfully!');
         }
     }
 
@@ -89,35 +94,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
         if(error)
         {
-             console.error('Error adding owner: ', error);
-            updateMessage('Error', null, {message: 'Error adding owner: ' + error.message});
+            updateMessage(`Error adding owner: ${error.message}`);
         }
         else
         {
             document.getElementById('add-new-owner-form').style.display = 'none';
-            const messageElement = document.getElementById('message');
-            messageElement.textContext = "Thank you for submitting the owner's details. Please click 'Add' to add your vehicle's details.";
+           updateMessage("Thank you for submitting the owner's details. Please click 'Add' to add your vehicle's details.");
         }
         
         /*updateMessage('Person', data, error);*/
     }
 
-    function updateMessage(table, data, error) {
+    function updateMessage(message, isSearch = false, table = '', data = []) {
         const messageElement = document.getElementById('message');
         const outputElement = document.getElementById('output');
-        messageElement.textContent = '';
-        outputElement.innerHTML = '';
+        messageElement.textContent = message;
 
-        if (error) {
-            console.error('Error: ', error);
-            messageElement.textContent = 'Error';
-            outputElement.innerHTML = `<p>Error occurred: ${error.message}</p>`;
-        } else if (data.length === 0) {
-            messageElement.textContent = 'No result found';
-            outputElement.innerHTML = '<p>No results found.</p>';
-        } else {
-            messageElement.textContent = 'Search successful';
-            let outputList = data.map(item => {
+        if (isSearch) {
+            const outputList = data.map(item => {
                 if (table === 'Person') {
                     return `<div class="result-box">
                         <p><strong>ID:</strong> ${item.PersonID}</p>
@@ -138,6 +132,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }).join('');
             outputElement.innerHTML = `<div class="output-area">${outputList}</div>`;
+        } else {
+            outputElement.innerHTML = '';
         }
     }
+
 });
