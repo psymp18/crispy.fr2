@@ -1,4 +1,5 @@
-body {
+body 
+{
     margin: 0;
     padding: 0;
     height: 100%;
@@ -6,7 +7,8 @@ body {
     flex-direction: column;
 }
 
-#container {
+#container 
+{
     display: grid;
     grid-template-rows: auto 1fr auto;
     grid-template-columns: 1fr 4fr;
@@ -31,7 +33,8 @@ body {
 }
 
 
-#results {
+#results 
+{
     display: flex;
     flex: 1;
     flex-wrap: wrap;
@@ -41,7 +44,8 @@ body {
     margin: 10px;
 }
 
-.nav-links{
+.nav-links
+{
     padding: 10px;
     text-decoration: underline;
     margin: 0;
@@ -50,77 +54,88 @@ body {
     list-style-type: none;
 }
 
-nav > ul > li {
+nav > ul > li 
+{
     margin: 0 10px;
 }
 
-footer {
+footer 
+{
     grid-row: 3;
 }
 
-aside {
-    grid-column: 1; /* Set sidebar to the first column */
+aside 
+{
+    grid-column: 1; 
     grid-row: 2;
 }
 
-header, footer {
+header, footer 
+{
     text-align: center;
     grid-column: 1 / -1;
 }
 
-footer, header, aside, main {
+footer, header, aside, main 
+{
     border: 1px solid black;
     padding: 10px;
     margin: 10px;
 }
 
-aside img{
+aside img
+{
     max-width: 50%;
     max-height: 25%;
 }
 
-main {
+main 
+{
     grid-row: 2;
-    grid-column: 2; /* Place the main content in the second column */
+    grid-column: 2; 
     display: flex;
     flex-direction: column;
 }
 
 
-@media (max-width: 500px) {
+@media (max-width: 500px) 
+{
 
-    #container {
-        grid-template-columns: 1fr 4fr; /* Sidebar to footer ratio */
+    #container 
+    {
+        grid-template-columns: 1fr 4fr; 
         grid-template-areas:
           "header"
           "main"
-          "sidebar footer"; /* Sidebar next to footer */
+          "sidebar footer";
     }
 
-    nav > ul {
-        flex-direction: column; /* Stack links vertically */
+    nav > ul
+    {
+        flex-direction: column; 
         text-align: left;
     }
 
-    main {
-        grid-column: 1 / -1; /* Main content spans full width */
+    main 
+    {
+        grid-column: 1 / -1; 
     }
 
-    aside {
-        grid-area: sidebar; /* Aligns with new grid area */
-        grid-column: 1; /* Ensures sidebar stays on the left */
+    aside 
+    {
+        grid-area: sidebar; 
+        grid-column: 1; 
     }
 
-    aside img{
+    aside img
+    {
         max-width: 100%;
         max-height: 100%;
     }
 
-    footer {
-        grid-area: footer; /* Aligns with new grid area */
-        grid-column: 2; /* Ensures footer is on the right */
+    footer 
+    {
+        grid-area: footer; 
+        grid-column: 2; 
     }
-
-
-
 }
