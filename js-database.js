@@ -151,28 +151,26 @@ document.addEventListener('DOMContentLoaded', function()
 
         if(isSearch && data.length) 
         {
-            let outputList = '<div class="output-area">'; // Start of results wrapper
-            data.forEach(item => {
-                outputList += `<div class="result-box">`; // Each result is wrapped in a result-box div
+            const outputList = data.map(item => {
                 if (table === 'Person') {
-                    outputList += `
+                    return `<div class="result-box">
                         <p><strong>ID:</strong> ${item.PersonID}</p>
                         <p><strong>Name:</strong> ${item.Name}</p>
                         <p><strong>Address:</strong> ${item.Address}</p>
                         <p><strong>DOB:</strong> ${item.DOB}</p>
                         <p><strong>License Number:</strong> ${item.LicenseNumber}</p>
-                        <p><strong>Expiry Date:</strong> ${item.ExpiryDate}</p>`;
+                        <p><strong>Expiry Date:</strong> ${item.ExpiryDate}</p>
+                    </div>`;
                 } else {
-                    outputList += `
+                    return `<div class="result-box">
                         <p><strong>Vehicle ID:</strong> ${item.VehicleID}</p>
                         <p><strong>Make:</strong> ${item.Make}</p>
                         <p><strong>Model:</strong> ${item.Model}</p>
                         <p><strong>Colour:</strong> ${item.Colour}</p>
-                        <p><strong>Owner ID:</strong> ${item.OwnerID || 'No owner'}</p>`;
+                        <p><strong>Owner ID:</strong> ${item.OwnerID}</p>
+                    </div>`;
                 }
-                outputList += '</div>'; // Close each result-box div
-            });
-            outputList += '</div>';
+            }).join('');
             results.innerHTML = outputList;
         }
         else 
