@@ -167,7 +167,6 @@ document.addEventListener('DOMContentLoaded', function()
                         <p><strong>Owner ID:</strong> ${item.OwnerID || 'No owner'}</p>
                     `}
                 </div>`;
-                }
             }).join('');
             results.innerHTML = `<div class="output-area">${outputList}</div>`;
         }
