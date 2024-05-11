@@ -98,15 +98,13 @@ document.addEventListener('DOMContentLoaded', function()
             updateMessage('Error: ' + error.message);
             return;
         }
-
-        if(data.length === 0)
+        else if(data.length === 0)
         {
             document.getElementById('add-new-owner-form').style.display = 'block';
             updateMessage('Owner does not exist. Please add the owner first.');
         }
         else
         {
-            document.getElementById('add-new-owner-form').style.display = 'none';
             addNewVehicle();    
         }
     }
@@ -148,7 +146,6 @@ document.addEventListener('DOMContentLoaded', function()
         }
         else
         {
-            document.getElementById('add-new-owner-form').style.display = 'none';
             updateMessage("Thank you for submitting the owner's details. Please click 'Add' to add your vehicle's details.");
             addNewVehicle();
         }        
