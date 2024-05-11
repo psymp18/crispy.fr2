@@ -50,6 +50,12 @@ document.addEventListener('DOMContentLoaded', function()
     async function addVehicle(e)
     {
         e.preventDefault();
+        const owner = document.getElementById('owner').value.trim();
+        if(!owner)
+        {
+            updateMessage('Error: Please provide an Owner ID');
+            return;
+        } 
         checkOwner();
     }
 
