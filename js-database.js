@@ -93,7 +93,13 @@ document.addEventListener('DOMContentLoaded', function()
     {
         const {data, error} = await supabase.from('Person').select('PersonID').eq('PersonID', owner);
 
-        if(error || data.length === 0) 
+        if(error) 
+        {
+            updateMessage('Error: ' + error.message);
+            return;
+        }
+
+        if(data.length === 0)
         {
             document.getElementById('add-new-owner-form').style.display = 'block';
             updateMessage('Owner does not exist. Please add the owner first.');
@@ -120,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function()
         }
         else 
         {
-            updateMessage('Vehicle added successfully!');
+            updateMessage('Vehicle added successfully');
         }
     }
 
