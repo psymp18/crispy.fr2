@@ -11,18 +11,33 @@ document.addEventListener('DOMContentLoaded', function()
     peopleForm?.addEventListener('submit', async (event) => {
         event.preventDefault();
 
-        performSearch('Person', {
-            Name: document.getElementById('name').value.trim(),
-            LicenseNumber: document.getElementById('license').value.trim()
-        });
+        const name = document.getElementById('name').value.trim();
+        const license = document.getElementById('license').value.trim();
+        if(!name && !license)
+        {
+            updateMessage('Error');
+            return;
+        }
+        else if(name && license)
+        {
+            updateMessage('Error');
+            return;
+        }
+
+        performSearch('Person', {Name: name, LicenseNumber: license});
     });
 
     vehicleForm?.addEventListener('submit', async (event) => {
         event.preventDefault();
+        const rego = document.getElementById('rego').value.trim();
 
-        performSearch('Vehicles', {
-            VehicleID: document.getElementById('rego').value.trim()
-        });
+        if(!rego)
+        {
+            updateMessage('Error');
+            return;
+        }
+
+        performSearch('Vehicles', {VehicleID: rego});
     });
 
     addVehicleForm?.addEventListener('submit', async (event) => {
@@ -46,11 +61,11 @@ document.addEventListener('DOMContentLoaded', function()
         const {data, error} = await query;
         if (error) 
         {
-            updateMessage(`Error: ${error.message}`);
+            updateMessage(`Error ${error.message}`);
         }
         else if (data.length === 0) 
         {
-            updateMessage('No results found');
+            updateMessage('No result found');
         } 
         else 
         {
