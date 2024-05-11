@@ -146,29 +146,34 @@ document.addEventListener('DOMContentLoaded', function()
         const msg = document.getElementById('message');
         const results = document.getElementById('results');
         msg.textContent = message;
+        results.innerHTML = '';
+
 
         if(isSearch && data.length) 
         {
-            const outputList = data.map(item => {
-                return `
-                <div class="result-box">
-                    ${table === 'Person' ? `
+            let outputList = '<div class="output-area">'; // Start of results wrapper
+            data.forEach(item => {
+                outputList += `<div class="result-box">`; // Each result is wrapped in a result-box div
+                if (table === 'Person') {
+                    outputList += `
                         <p><strong>ID:</strong> ${item.PersonID}</p>
                         <p><strong>Name:</strong> ${item.Name}</p>
                         <p><strong>Address:</strong> ${item.Address}</p>
                         <p><strong>DOB:</strong> ${item.DOB}</p>
                         <p><strong>License Number:</strong> ${item.LicenseNumber}</p>
-                        <p><strong>Expiry Date:</strong> ${item.ExpiryDate}</p>
-                    ` : `
+                        <p><strong>Expiry Date:</strong> ${item.ExpiryDate}</p>`;
+                } else {
+                    outputList += `
                         <p><strong>Vehicle ID:</strong> ${item.VehicleID}</p>
                         <p><strong>Make:</strong> ${item.Make}</p>
                         <p><strong>Model:</strong> ${item.Model}</p>
                         <p><strong>Colour:</strong> ${item.Colour}</p>
-                        <p><strong>Owner ID:</strong> ${item.OwnerID || 'No owner'}</p>
-                    `}
-                </div>`;
-            }).join('');
-            results.innerHTML = `<div class="output-area">${outputList}</div>`;
+                        <p><strong>Owner ID:</strong> ${item.OwnerID || 'No owner'}</p>`;
+                }
+                outputList += '</div>'; // Close each result-box div
+            });
+            outputList += '</div>';
+            results.innerHTML = outputList;
         }
         else 
         {
