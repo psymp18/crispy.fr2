@@ -91,7 +91,6 @@ document.addEventListener('DOMContentLoaded', function()
 
     async function checkOwner(owner)
     {
-        const owner = document.getElementById('owner').value.trim();
         const {data, error} = await supabase.from('Person').select('PersonID').eq('PersonID', owner);
 
         if(error || data.length === 0) 
