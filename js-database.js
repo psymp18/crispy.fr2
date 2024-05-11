@@ -57,16 +57,19 @@ document.addEventListener('DOMContentLoaded', function()
             return;
         } 
 
+        const ownerId = await getOwnerId(ownerName);
+        if(!ownerId)
+        {
+            updateMessage('Owner does not exist. Please add the owner first');
+            return;
+        }
+
         const rego = document.getElementById('rego').value.trim();
         const make = document.getElementById('make').value.trim();
         const model = document.getElementById('model').value.trim();
         const colour = document.getElementById('colour').value.trim();
 
-        let ownerId = await getOrCreateOwner(ownerName);
-        if(ownerId)
-        {
-            await insertVehicle(ownerId, rego, make, model, colour);
-        }
+        await insertVehicle(ownerId, rego, make, model, colour);
     }
 
     async function addOwner(e)
@@ -80,8 +83,7 @@ document.addEventListener('DOMContentLoaded', function()
         const license = document.getElementById('license').value.trim();
         const expire = document.getElementById('expire').value.trim();
 
-        let {data, error} = await supabase.from('Person').insert([{PersonID: personId, Name: name, Address: address, DOB: dob, LicenseNumber: license, ExpiryDate: expire }], {upsert: true});
-
+        const {error} = await supabase.from('Person').insert([{PersonID: personId, Name: name, Address: address, DOB: dob, LicenseNumber: license, ExpiryDate: expire }], {upsert: true});
         if(error)
         {
             updateMessage('Error adding owner: ' + error.message);
@@ -93,13 +95,12 @@ document.addEventListener('DOMContentLoaded', function()
         }
     }
 
-    async function getOrCreateOwner(name)
+    async function getOwnerId(name)
     {
         let {data, error} = await supabase.from('Person').select('PersonID').ilike('Name', `%${name}%`).single();
         if(error && !data)
         {
             document.getElementById('add-new-owner-form').style.display = 'block';
-            updateMessage('Owner does not exist. Please add owner');
             return null;
         } 
         return data.PersonID;
