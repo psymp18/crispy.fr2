@@ -57,8 +57,7 @@ document.addEventListener('DOMContentLoaded', function()
             return;
         } 
 
-        const ownerId = await getOwnerId(ownerName);
-        if(!ownerId)
+        if(!ownerName)
         {
             updateMessage('Owner does not exist. Please add the owner first');
             return;
@@ -69,7 +68,21 @@ document.addEventListener('DOMContentLoaded', function()
         const model = document.getElementById('model').value.trim();
         const colour = document.getElementById('colour').value.trim();
 
-        await insertVehicle(ownerId, rego, make, model, colour);
+        try 
+        {
+            const ownerId = await getOwnerId(ownerName);
+            if(!ownerId) 
+            {
+                updateMessage('Error: Owner does not exist. Please add the owner first.');
+                return;
+            }
+            await insertVehicle(ownerId, rego, make, model, colour);
+            updateMessage('Vehicle added successfully');
+        } 
+        catch (error) 
+        {
+            updateMessage(`Error adding vehicle: ${error.message}`);
+        }
     }
 
     async function addOwner(e)
@@ -83,15 +96,22 @@ document.addEventListener('DOMContentLoaded', function()
         const license = document.getElementById('license').value.trim();
         const expire = document.getElementById('expire').value.trim();
 
-        const {error} = await supabase.from('Person').insert([{PersonID: personId, Name: name, Address: address, DOB: dob, LicenseNumber: license, ExpiryDate: expire }], {upsert: true});
-        if(error)
+        if (!name) 
         {
-            updateMessage('Error adding owner: ' + error.message);
+            updateMessage('Error: Owner name is required');
+            return;
         }
-        else
+
+        try 
         {
+            const { error } = await supabase.from('Person').insert([{ PersonID: personId, Name: name, Address: address, DOB: dob, LicenseNumber: license, ExpiryDate: expire }], { upsert: true });
+            if (error) throw error;
             updateMessage('Owner added successfully');
             document.getElementById('add-new-owner-form').style.display = 'none';
+        } 
+        catch (error) 
+        {
+            updateMessage(`Error adding owner: ${error.message}`);
         }
     }
 
