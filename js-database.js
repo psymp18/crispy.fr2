@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function()
             updateMessage('Error: Please provide an Owner ID');
             return;
         } 
-        checkOwner();
+        checkOwner(owner);
     }
 
     async function addOwner(e)
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function()
         }
     }
 
-    async function checkOwner()
+    async function checkOwner(owner)
     {
         const owner = document.getElementById('owner').value.trim();
         const {data, error} = await supabase.from('Person').select('PersonID').eq('PersonID', owner);
@@ -98,10 +98,11 @@ document.addEventListener('DOMContentLoaded', function()
         {
             document.getElementById('add-new-owner-form').style.display = 'block';
             updateMessage('Owner does not exist. Please add the owner first.');
-            return false;
         }
-
-            await addNewVehicle();    
+        else
+        {
+            addNewVehicle();    
+        }
     }
 
     async function addNewVehicle() 
@@ -116,7 +117,6 @@ document.addEventListener('DOMContentLoaded', function()
 
         if(error)
         {
-            console.error('Add vehicle error:', error);
             updateMessage('Error adding vehicle: ' + error.message);
         }
         else 
@@ -138,13 +138,13 @@ document.addEventListener('DOMContentLoaded', function()
 
         if(error)
         {
-            console.error('Add owner error:', error);
             updateMessage('Error adding owner: ' + error.message);
         }
         else
         {
             document.getElementById('add-new-owner-form').style.display = 'none';
             updateMessage("Thank you for submitting the owner's details. Please click 'Add' to add your vehicle's details.");
+            addNewVehicle();
         }        
     }
 
