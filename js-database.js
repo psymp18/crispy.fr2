@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function()
         const results = document.getElementById('results');
         msg.textContent = message;
 
-        if(isSearch) 
+        if(isSearch && data) 
         {
             const outputList = data.map(item => {
                 if(table === 'Person') 
