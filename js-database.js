@@ -106,6 +106,7 @@ document.addEventListener('DOMContentLoaded', function()
         }
         else
         {
+            document.getElementById('add-new-owner-form').style.display = 'none';
             addNewVehicle();    
         }
     }
