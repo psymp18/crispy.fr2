@@ -92,11 +92,10 @@ document.addEventListener('DOMContentLoaded', function()
         {
             document.getElementById('add-new-owner-form').style.display = 'block';
             updateMessage('Owner does not exist. Please add the owner first.');
+            return false;
         }
-        else 
-        {
-            addNewVehicle();
-        }    
+
+            await addNewVehicle();    
     }
 
     async function addNewVehicle() 
@@ -111,6 +110,7 @@ document.addEventListener('DOMContentLoaded', function()
 
         if(error)
         {
+            console.error('Add vehicle error:', error);
             updateMessage('Error adding vehicle: ' + error.message);
         }
         else 
@@ -132,6 +132,7 @@ document.addEventListener('DOMContentLoaded', function()
 
         if(error)
         {
+            console.error('Add owner error:', error);
             updateMessage('Error adding owner: ' + error.message);
         }
         else
@@ -151,26 +152,26 @@ document.addEventListener('DOMContentLoaded', function()
 
         if(isSearch && data.length) 
         {
-            const outputList = data.map(item => {
-                if (table === 'Person') {
-                    return `<div class="result-box">
-                        <p><strong>ID:</strong> ${item.PersonID}</p>
-                        <p><strong>Name:</strong> ${item.Name}</p>
-                        <p><strong>Address:</strong> ${item.Address}</p>
-                        <p><strong>DOB:</strong> ${item.DOB}</p>
-                        <p><strong>License Number:</strong> ${item.LicenseNumber}</p>
-                        <p><strong>Expiry Date:</strong> ${item.ExpiryDate}</p>
-                    </div>`;
-                } else {
-                    return `<div class="result-box">
-                        <p><strong>Vehicle ID:</strong> ${item.VehicleID}</p>
-                        <p><strong>Make:</strong> ${item.Make}</p>
-                        <p><strong>Model:</strong> ${item.Model}</p>
-                        <p><strong>Colour:</strong> ${item.Colour}</p>
-                        <p><strong>Owner ID:</strong> ${item.OwnerID}</p>
-                    </div>`;
-                }
-            }).join('');
+        const outputList = data.map(item => {
+            if (table === 'Person') {
+                return `<div class="result-box">
+                    <p><strong>ID:</strong> ${item.PersonID}</p>
+                    <p><strong>Name:</strong> ${item.Name}</p>
+                    <p><strong>Address:</strong> ${item.Address}</p>
+                    <p><strong>DOB:</strong> ${item.DOB}</p>
+                    <p><strong>License Number:</strong> ${item.LicenseNumber}</p>
+                    <p><strong>Expiry Date:</strong> ${item.ExpiryDate}</p>
+                </div>`;
+            } else {
+                return `<div class="result-box">
+                    <p><strong>Vehicle ID:</strong> ${item.VehicleID}</p>
+                    <p><strong>Make:</strong> ${item.Make}</p>
+                    <p><strong>Model:</strong> ${item.Model}</p>
+                    <p><strong>Colour:</strong> ${item.Colour}</p>
+                    <p><strong>Owner ID:</strong> ${item.OwnerID}</p>
+                </div>`;
+            }
+        }).join('');
             results.innerHTML = outputList;
         }
         else 
