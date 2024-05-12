@@ -158,6 +158,11 @@ main
         grid-template-rows: auto auto auto;
     }
 
+    header, main, aside, footer
+    {
+        grid-column: 1 / -1;
+    }
+
     nav > ul
     {
         flex-direction: column; 
