@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function()
             return;
         }
     
-        insertVehicle(ownerId, rego, make, model, colour);
+        await insertVehicle(ownerId, rego, make, model, colour);
     }
 
     async function addOwner(e)
@@ -137,10 +137,9 @@ document.addEventListener('DOMContentLoaded', function()
         {
             updateMessage('Error adding vehicle: ' + error.message);
         }
-        else
-        {
-            updateMessage('Vehicle added successfully');
-        }
+
+        updateMessage('Vehicle added successfully');
+
     }
 
     async function performSearch(table, criteria) 
