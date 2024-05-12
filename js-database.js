@@ -66,13 +66,13 @@ document.addEventListener('DOMContentLoaded', function()
         //     updateMessage('Vehicle added successfully');
 
         // }
-        if (!ownerId) {
+        if (ownerId) {
+            await insertVehicle(ownerId, rego, make, model, colour);
+        } else {
             // Display the form to add new owner
             document.getElementById('add-new-owner-form').style.display = 'block';
             updateMessage('Owner does not exist. Please add the owner.');
-            // Store vehicle details in sessionStorage or another temporary store
             sessionStorage.setItem('vehicleDetails', JSON.stringify({rego, make, model, colour}));
-            return;
         }
     
         await insertVehicle(ownerId, rego, make, model, colour);
@@ -89,10 +89,10 @@ document.addEventListener('DOMContentLoaded', function()
         const license = document.getElementById('license').value.trim();
         const expire = document.getElementById('expire').value.trim();
 
-        if (!name) {
-            updateMessage('Name is required to add a new owner.');
-            return;
-        }
+        // if (!name) {
+        //     updateMessage('Name is required to add a new owner.');
+        //     return;
+        // }
 
         // const {error} = await supabase.from('Person').insert([{PersonID: personId, Name: name, Address: address, DOB: dob, LicenseNumber: license, ExpiryDate: expire}], {upsert: true});
         // if (error) {
@@ -102,20 +102,16 @@ document.addEventListener('DOMContentLoaded', function()
         //     document.getElementById('add-new-owner-form').style.display = 'none';
         // }
         const { error, data } = await supabase.from('Person').insert([{PersonID: personId, Name: name, Address: address, DOB: dob, LicenseNumber: license, ExpiryDate: expire}], {upsert: true});
-        if (error)
-        {
+        if (error) {
             updateMessage('Error adding owner: ' + error.message);
-        } 
-        else 
-        {
+        } else {
             updateMessage('Owner added successfully');
-            document.getElementById('add-new-owner-form').style.display = 'none';
-            // Now add the vehicle after owner is successfully added
             const vehicleDetails = JSON.parse(sessionStorage.getItem('vehicleDetails'));
             if (vehicleDetails) {
                 await insertVehicle(data[0].PersonID, vehicleDetails.rego, vehicleDetails.make, vehicleDetails.model, vehicleDetails.colour);
                 sessionStorage.removeItem('vehicleDetails'); // Clean up
             }
+            document.getElementById('add-new-owner-form').style.display = 'none';
         }
     }
 
