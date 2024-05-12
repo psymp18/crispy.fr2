@@ -62,10 +62,14 @@ document.addEventListener('DOMContentLoaded', function()
             updateMessage('Error adding vehicle: ' + error.message);
             return;
         }
+        else
+        {
+            updateMessage('Vehicle added successfully');
+
+        }
     
-        updateMessage('Vehicle added successfully');
     
-        insertVehicle(ownerId, rego, make, model, colour);
+        //insertVehicle(ownerId, rego, make, model, colour);
     }
 
     async function addOwner(e)
@@ -104,18 +108,18 @@ document.addEventListener('DOMContentLoaded', function()
         return data.PersonID;
     }
 
-    async function insertVehicle(ownerId, rego, make, model, colour)
-    {
-        const {error} = await supabase.from('Vehicles').insert([{ VehicleID: rego, Make: make, Model: model, Colour: colour, OwnerID: ownerId }]);
-        if(error)
-        {
-            updateMessage('Error adding vehicle: ' + error.message);
-        }
-        else
-        {
-            updateMessage('Vehicle added successfully');
-        }
-    }
+    // async function insertVehicle(ownerId, rego, make, model, colour)
+    // {
+    //     const {error} = await supabase.from('Vehicles').insert([{ VehicleID: rego, Make: make, Model: model, Colour: colour, OwnerID: ownerId }]);
+    //     if(error)
+    //     {
+    //         updateMessage('Error adding vehicle: ' + error.message);
+    //     }
+    //     else
+    //     {
+    //         updateMessage('Vehicle added successfully');
+    //     }
+    // }
 
     async function performSearch(table, criteria) 
     {
