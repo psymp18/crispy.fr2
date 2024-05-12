@@ -153,7 +153,8 @@ document.addEventListener('DOMContentLoaded', function()
         if(isSearch && data.length) 
         {
         const outputList = data.map(item => {
-            if (table === 'Person') {
+            if(table === 'Person') 
+            {
                 return `<div class="result-box">
                     <p><strong>ID:</strong> ${item.PersonID}</p>
                     <p><strong>Name:</strong> ${item.Name}</p>
@@ -162,7 +163,9 @@ document.addEventListener('DOMContentLoaded', function()
                     <p><strong>License Number:</strong> ${item.LicenseNumber}</p>
                     <p><strong>Expiry Date:</strong> ${item.ExpiryDate}</p>
                 </div>`;
-            } else {
+            } 
+            else 
+            {
                 return `<div class="result-box">
                     <p><strong>Vehicle ID:</strong> ${item.VehicleID}</p>
                     <p><strong>Make:</strong> ${item.Make}</p>
