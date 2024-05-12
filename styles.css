@@ -20,7 +20,7 @@ body
     min-height: 100vh;
     margin: 0;
     padding: 0;
-  }
+}
 
 .result-box
 {
@@ -102,49 +102,6 @@ main
     flex-direction: column;
 }
 
-
-/* @media (max-width: 500px) 
-{
-
-    #container 
-    {
-        grid-template-columns: 1fr 4fr; 
-        grid-template-areas:
-          "header"
-          "main"
-          "sidebar footer";
-    }
-
-    nav > ul
-    {
-        flex-direction: column; 
-        text-align: left;
-    }
-
-    main 
-    {
-        grid-column: 1 / -1; 
-    }
-
-    aside 
-    {
-        grid-area: sidebar; 
-        grid-column: 1; 
-    }
-
-    aside img
-    {
-        max-width: 100%;
-        max-height: 100%;
-    }
-
-    footer 
-    {
-        grid-area: footer; 
-        grid-column: 2; 
-    }
-} */
-
 @media (max-width: 500px) 
 {
     #container 
@@ -154,21 +111,21 @@ main
             "header header"
             "main main"
             "sidebar footer";
-        grid-template-columns: 1fr 4fr; /* Adjusted for the 1:4 ratio */
+        grid-template-columns: 1fr 4fr;
         grid-template-rows: auto auto auto;
         margin: 0;
     }
 
     header, footer, aside, main 
     {
-        margin: 0; /* Zero margins for all major layout components */
-        padding: 10px; /* Maintain internal spacing without affecting grid ratio */
+        margin: 0;
+        padding: 10px;
     }
 
     footer, header, aside, main
     {
         border: 1px solid black;
-        padding: 10px; /* Example: keep padding but control margin */
+        padding: 10px;
     }
 
     nav > ul
