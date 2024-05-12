@@ -156,11 +156,19 @@ main
             "sidebar footer";
         grid-template-columns: 1fr 4fr; /* Adjusted for the 1:4 ratio */
         grid-template-rows: auto auto auto;
+        margin: 0;
     }
 
-    header, main, aside, footer
+    header, footer, aside, main 
     {
-        grid-column: 1 / -1;
+        margin: 0; /* Zero margins for all major layout components */
+        padding: 10px; /* Maintain internal spacing without affecting grid ratio */
+    }
+
+    footer, header, aside, main
+    {
+        border: 1px solid black;
+        padding: 10px; /* Example: keep padding but control margin */
     }
 
     nav > ul
