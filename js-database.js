@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function()
 
         const name = document.getElementById('name').value.trim();
         const license = document.getElementById('license').value.trim();
+
         if(!name && !license)
         {
             updateMessage('Error');
@@ -31,6 +32,7 @@ document.addEventListener('DOMContentLoaded', function()
     async function vehicleSearch(e)
     {
         e.preventDefault();
+
         const rego = document.getElementById('rego').value.trim();
 
         if(!rego)
@@ -46,30 +48,18 @@ document.addEventListener('DOMContentLoaded', function()
     {
         e.preventDefault();
         const ownerName = document.getElementById('owner-name').value.trim();
-        const ownerId = await getOwnerId(ownerName);
-        // if (!ownerId) {
-        //     updateMessage('Owner does not exist. Please add the owner first.');
-        //     return;
-        // }
-    
+        const ownerId = await getOwnerId(ownerName);    
         const rego = document.getElementById('rego').value.trim();
         const make = document.getElementById('make').value.trim();
         const model = document.getElementById('model').value.trim();
         const colour = document.getElementById('colour').value.trim();
     
-        // const { error } = await supabase.from('Vehicles').insert([{ VehicleID: rego, Make: make, Model: model, Colour: colour, OwnerID: ownerId }]);
-        // if (error) {
-        //     updateMessage('Error adding vehicle: ' + error.message);
-        // }
-        // else
-        // {
-        //     updateMessage('Vehicle added successfully');
-
-        // }
-        if (ownerId) {
+        if(ownerId) 
+        {
             await insertVehicle(ownerId, rego, make, model, colour);
-        } else {
-            // Display the form to add new owner
+        } 
+        else 
+        {
             document.getElementById('add-new-owner-form').style.display = 'block';
             updateMessage('Owner does not exist. Please add the owner.');
             sessionStorage.setItem('vehicleDetails', JSON.stringify({rego, make, model, colour}));
@@ -89,27 +79,19 @@ document.addEventListener('DOMContentLoaded', function()
         const license = document.getElementById('license').value.trim();
         const expire = document.getElementById('expire').value.trim();
 
-        // if (!name) {
-        //     updateMessage('Name is required to add a new owner.');
-        //     return;
-        // }
-
-        // const {error} = await supabase.from('Person').insert([{PersonID: personId, Name: name, Address: address, DOB: dob, LicenseNumber: license, ExpiryDate: expire}], {upsert: true});
-        // if (error) {
-        //     updateMessage('Error adding owner: ' + error.message);
-        // } else {
-        //     updateMessage('Owner added successfully');
-        //     document.getElementById('add-new-owner-form').style.display = 'none';
-        // }
-        const { error, data } = await supabase.from('Person').insert([{PersonID: personId, Name: name, Address: address, DOB: dob, LicenseNumber: license, ExpiryDate: expire}], {upsert: true});
-        if (error) {
+        const {error, data} = await supabase.from('Person').insert([{PersonID: personId, Name: name, Address: address, DOB: dob, LicenseNumber: license, ExpiryDate: expire}], {upsert: true});
+        if(error) 
+        {
             updateMessage('Error adding owner: ' + error.message);
-        } else {
+        } 
+        else 
+        {
             updateMessage('Owner added successfully');
             const vehicleDetails = JSON.parse(sessionStorage.getItem('vehicleDetails'));
-            if (vehicleDetails) {
+            if(vehicleDetails)
+            {
                 await insertVehicle(data[0].PersonID, vehicleDetails.rego, vehicleDetails.make, vehicleDetails.model, vehicleDetails.colour);
-                sessionStorage.removeItem('vehicleDetails'); // Clean up
+                sessionStorage.removeItem('vehicleDetails');
             }
             document.getElementById('add-new-owner-form').style.display = 'none';
         }
@@ -120,7 +102,6 @@ document.addEventListener('DOMContentLoaded', function()
         const {data, error} = await supabase.from('Person').select('PersonID').ilike('Name', `%${name}%`).single();
         if(error && !data)
         {
-            // document.getElementById('add-new-owner-form').style.display = 'block';
             return null;
         } 
         return data.PersonID;
@@ -160,71 +141,6 @@ document.addEventListener('DOMContentLoaded', function()
             updateMessage('Search successful', true, table, data);
         }
     }
-
-    // async function checkOwner(owner)
-    // {
-    //     const {data, error} = await supabase.from('Person').select('PersonID').eq('PersonID', owner);
-
-    //     if(error) 
-    //     {
-    //         updateMessage('Error: ' + error.message);
-    //         return;
-    //     }
-    //     else if(data.length === 0)
-    //     {
-    //         document.getElementById('add-new-owner-form').style.display = 'block';
-    //         updateMessage('Owner does not exist. Please add the owner first.');
-    //     }
-    //     else
-    //     {
-    //         addNewVehicle();    
-    //     }
-    // }
-
-    // async function addNewVehicle() 
-    // {
-    //     const ownerName = document.getElementById('owner-name').value.trim();
-    //     const rego = document.getElementById('rego').value.trim();
-    //     const make = document.getElementById('make').value.trim();
-    //     const model = document.getElementById('model').value.trim();
-    //     const colour = document.getElementById('colour').value.trim();
-    //     const owner = document.getElementById('owner').value.trim();
-
-
-    //     if(ownerName)
-    //     {
-    //         updateMessage('Error: please provide a name');
-    //         return;
-    //     }
-
-    //     let ownerId = await getOrCreateOwner(ownerName);
-    //     if(ownerId)
-    //     {
-    //         await addNewVehicle(ownerId, rego, make, model, colour);
-    //     }
-    // }
-
-    // async function addNewOwner() 
-    // {
-    //     const personid = document.getElementById('personid').value.trim();
-    //     const name = document.getElementById('name').value.trim();
-    //     const address = document.getElementById('address').value.trim();
-    //     const dob = document.getElementById('dob').value.trim();
-    //     const license = document.getElementById('license').value.trim();
-    //     const expire = document.getElementById('expire').value.trim();
-
-    //     const {data, error} = await supabase.from('Person').insert([{PersonID: personid, Name: name, Address: address, DOB: dob, LicenseNumber: license, ExpiryDate: expire}]);
-
-    //     if(error)
-    //     {
-    //         updateMessage('Error adding owner: ' + error.message);
-    //     }
-    //     else
-    //     {
-    //         updateMessage("Thank you for submitting the owner's details. Please click 'Add' to add your vehicle's details.");
-    //         addNewVehicle();
-    //     }        
-    // }
 
     function updateMessage(message, isSearch = false, table = '', data = []) 
     {
