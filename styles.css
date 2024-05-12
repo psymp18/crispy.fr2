@@ -98,7 +98,7 @@ main
 }
 
 
-@media (max-width: 500px) 
+/* @media (max-width: 500px) 
 {
 
     #container 
@@ -137,5 +137,46 @@ main
     {
         grid-area: footer; 
         grid-column: 2; 
+    }
+} */
+
+@media (max-width: 500px) 
+{
+    #container 
+    {
+        display: grid;
+        grid-template-areas:
+            "header header"
+            "main main"
+            "sidebar footer";
+        grid-template-columns: 1fr 4fr; /* Adjusted for the 1:4 ratio */
+        grid-template-rows: auto auto auto;
+    }
+
+    nav > ul
+    {
+        flex-direction: column; 
+        text-align: left;
+    }
+
+    main 
+    {
+        grid-area: main;
+    }
+
+    aside 
+    {
+        grid-area: sidebar;
+    }
+
+    footer 
+    {
+        grid-area: footer;
+    }
+
+    aside img
+    {
+        max-width: 100%;
+        max-height: 100%;
     }
 }
