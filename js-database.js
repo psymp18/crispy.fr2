@@ -60,7 +60,6 @@ document.addEventListener('DOMContentLoaded', function()
         const { error } = await supabase.from('Vehicles').insert([{ VehicleID: rego, Make: make, Model: model, Colour: colour, OwnerID: ownerId }]);
         if (error) {
             updateMessage('Error adding vehicle: ' + error.message);
-            return;
         }
         else
         {
@@ -88,9 +87,9 @@ document.addEventListener('DOMContentLoaded', function()
             return;
         }
 
-        const response = await supabase.from('Person').insert([{PersonID: personId, Name: name, Address: address, DOB: dob, LicenseNumber: license, ExpiryDate: expire}], {upsert: true});
-        if (response.error) {
-            updateMessage('Error adding owner: ' + response.error.message);
+        const {error} = await supabase.from('Person').insert([{PersonID: personId, Name: name, Address: address, DOB: dob, LicenseNumber: license, ExpiryDate: expire}], {upsert: true});
+        if (error) {
+            updateMessage('Error adding owner: ' + error.message);
         } else {
             updateMessage('Owner added successfully');
             document.getElementById('add-new-owner-form').style.display = 'none';
@@ -102,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function()
         const {data, error} = await supabase.from('Person').select('PersonID').ilike('Name', `%${name}%`).single();
         if(error && !data)
         {
-            document.getElementById('add-new-owner-form').style.display = 'block';
+            // document.getElementById('add-new-owner-form').style.display = 'block';
             return null;
         } 
         return data.PersonID;
